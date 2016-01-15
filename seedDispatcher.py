@@ -79,6 +79,7 @@ def update():
     root.after(100, update)
 
 raspis = ["/dev/ttyUSB1", "/dev/ttyUSB3"]
+#raspis = ["/dev/tty.usbserial-FTXR2FSNB", "/dev/tty.usbserial-FTXRNUKVB"]
 
 def main():
 
