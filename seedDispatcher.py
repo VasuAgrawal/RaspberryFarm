@@ -9,22 +9,25 @@ import Queue
 
 def prepare(raspis):
     # First, we log in to all of the machines
-    map(login.login, raspis)
+    children = map(login.login, raspis)
+    print children
     print "Logged in to all the rapis"
 
     # Then, we generate a fresh set of seeds for the rapis to each crack
     seedGen.gen(len(raspis), bytes=80, number=2)
 
     # Then, we need to send it to all of the rapis
-    for i, port in enumerate(raspis):
+    for i, port in enumerate(children):
         outfile.send("output%d.hashes" % i, port)
         # outfile.send("seedParser.py", port)
 
+    return children
+
 def analyze(port, filename):
     print "Analyzing port %s" % port
-    child = fdpexpect.fdspawn(os.open(port, os.O_RDWR | os.O_NONBLOCK |
-        os.O_NOCTTY))
+        #child = fdpexpect.fdspawn(os.open(port, os.O_RDWR | os.O_NONBLOCK | os.O_NOCTTY))
 
+    child = port
     child.sendline("")
     child.expect("pi@raspberrypi")
 
@@ -78,15 +81,15 @@ def update():
         pass
     root.after(100, update)
 
-raspis = ["/dev/ttyUSB1", "/dev/ttyUSB3"]
-#raspis = ["/dev/tty.usbserial-FTXR2FSNB", "/dev/tty.usbserial-FTXRNUKVB"]
+#raspis = ["/dev/ttyUSB1", "/dev/ttyUSB3"]
+raspis = ["/dev/tty.usbserial-FTXR2FSNB", "/dev/tty.usbserial-FTXRNUKVB"]
 
 def main():
 
-    prepare(raspis)
+    children = prepare(raspis)
 
     threads = [Thread(target=analyze, args=(raspi[1], "output%d.hashes" %
-               raspi[0])) for raspi in enumerate(raspis)]
+               raspi[0])) for raspi in enumerate(children)]
 
     map(Thread.start, threads)
 

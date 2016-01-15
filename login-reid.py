@@ -62,7 +62,7 @@ def login(port, user="pi", password="raspberry", baudrate=115200):
 
     raise Exception("Something is probably wrong with the raspberry pi?")
 
-ports = ["/dev/tty.usbserial-FTXRNUKVB"]
+ports = ["/dev/tty.usbserial-FTXRNUKVB", "/dev/tty.usbserial-FTXR2FSNB"]
 
 if __name__ == "__main__":
     #for i in range(1, 4, 2):
