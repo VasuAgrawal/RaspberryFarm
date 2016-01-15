@@ -35,7 +35,7 @@ def login(port, user="pi", password="raspberry", baudrate=115200):
 
     raise Exception("Something is probably wrong with the raspberry pi?")
 
-for i in range(1, 4, 2):
-    print "Logging into /dev/ttyUSB%d" % i
-    login("/dev/ttyUSB%d" % i).close()
-
+if __name__ == "__main__":
+    for i in range(1, 4, 2):
+        print "Logging into /dev/ttyUSB%d" % i
+        login("/dev/ttyUSB%d" % i).close()
