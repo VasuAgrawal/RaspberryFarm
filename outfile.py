@@ -4,26 +4,22 @@ import sys
 import argparse
 import os
 from pexpect import fdpexpect
-import serial
-import time
 
 def send(input, port):
-    #child = fdpexpect.fdspawn(os.open(port, os.O_RDWR | os.O_NONBLOCK | os.O_NOCTTY))
-    #ser = serial.Serial(port, 115200)
-    #child = fdpexpect.fdspawn(ser.fileno())
-    child = port
-    print child.isalive()
+    child = fdpexpect.fdspawn(os.open(port, os.O_RDWR | os.O_NONBLOCK
+        | os.O_NOCTTY))
+
     child.sendline("python ~/Documents/RaspberryFarm/writeFile.py -o %s -n %d" %
             (input, os.path.getsize(input)))
     child.expect("Ready", timeout = 10)
-    #time.sleep(10)
     print "sending file %s to %s" % (input, port)
 
     val = open(input, "r").read()
-    for line in val.splitlines():
-        child.sendline(line)
+    child.send(val)
+    # for line in val.splitlines():
+        # child.sendline(line)
 
-    #child.close()
+    child.close()
 
 
 
