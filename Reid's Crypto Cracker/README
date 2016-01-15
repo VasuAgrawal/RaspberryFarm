@@ -1,0 +1,25 @@
+A cryptosystem is a method to convert a message into a cipher, which is difficult to understand by unauthorized people. Assume that both the message and the cipher are strings over the alphabet {a, b,..., z}. A shift cipher is a cryptosystem that shifts each character in the message by k positions. 
+
+For example, if k = 3 , then a is converted into d, b into e, ... , x into a, y into b, and z into c. 
+
+The number k is called the key of the cryptosystem. To make the cipher more difficult to understand, spaces and all punctuations are removed from the message before encryption. 
+
+For example, assume that k = 3 , the message: we will meet at midnight is encrypted into the cipher: zhzloophhwdwplgqljkw. Since there are only 26 different keys, given a ciphertext, it is easy to convert each character back to the original message. However, by using a computer, it may not be trivial to insert spaces so that the original message can be recovered automatically. For simplicity, we assume that a message is recovered if spaces are inserted into the text so that each word separated by spaces is a word in the dictionary. Given a ciphertext, write a program to recover the message. 
+
+You may assume that each word used in the message appears in the dictionary. The dictionary is provided in dictionary.txt. This dictionary is a text file; each line contains a word. There are no words with capital or special letters in the dictionary. You may want to look at the dictionary before programming. 
+
+It is not necessary to check if the sentence is grammatically correct or not. The answer will be considered correct if no adjacent words are single character and the average number of characters in the words is greater than 2. 
+
+Input
+The input data is a set of ciphers. (test1 - test6)
+
+Output
+The output is the key k and the recovered message for each of the cipher. Print the solution of each test case in a line. If the solution is not unique, print any valid solution. If there is no solution, print ``NO SOLUTIONS".
+
+Sample Input
+zhzloophhwdwplgqljkw
+lowder
+
+Sample Output
+k=3: we will meet at midnight
+NO SOLUTIONS

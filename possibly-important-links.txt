@@ -1,0 +1,2 @@
+https://pexpect.readthedocs.org/en/stable/examples.html
+http://stackoverflow.com/questions/17539185/serial-communication-with-raspberry-pi
