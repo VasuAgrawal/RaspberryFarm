@@ -3,6 +3,7 @@ from pexpect import fdpexpect
 import fuckit
 import os
 import serial
+import time
 
 def login(port, user="pi", password="raspberry", baudrate=115200):
     timeout = 5
@@ -10,13 +11,31 @@ def login(port, user="pi", password="raspberry", baudrate=115200):
     # child = pexpect.spawn("screen %s %d" % (port, baudrate))
     #child = fdpexpect.fdspawn(os.open(port, os.O_RDWR | os.O_NOCTTY))
     
+    print port
     ser = serial.Serial(port, 115200)
-    child = fdpexpect.fdspawn(ser)
-
+    ser.flushInput()
+    ser.flushOutput()
+    ser.write("\n")
+    ser.flush()
+    time.sleep(1)
+    print ser.inWaiting()
+    ser.write("pi\n");
+    ser.flush();
+    time.sleep(1);
+    ser.write("raspberry\n");
+    ser.flush();
+    time.sleep(1);
+    #ser.reset_input_buffer()
+    #ser.reset_output_buffer()
+    child = fdpexpect.fdspawn(ser.fileno())
+    #child = fdpexpect.fdspawn(ser)
+    
+    print "Spawned"
 
     # Needed to start the whole buffering thing, and to be able to see output on
     # the screen
     child.sendline("")
+   
 
     # We see if we got the bash prompt instead of the login prompt. If we get
     # the bash prompt, we're already logged in.
@@ -28,13 +47,16 @@ def login(port, user="pi", password="raspberry", baudrate=115200):
     # try to log in 3 times
     for i in range(3):
         try:
-            child.expect([pexpect.EOF, "raspberrypi login:"], timeout=timeout)
+            child.expect("raspberrypi login:", timeout=timeout)
+            print child.before
             child.sendline(user)
-            child.expect([pexpect.EOF, "Password:"], timeout=timeout)
+            child.expect("Password:", timeout=timeout)
+            print child.before
             child.sendline(password)
             return child
         except Exception as e:
             print e
+            print child.before
             print "Failed to log in, trying again ..."
             continue
 
